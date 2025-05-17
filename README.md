@@ -23,6 +23,7 @@
 ```bash
 npm install
 npm run dev
+```
 🔑 Setup
 Create a .env file and add your TMDB API key:
 
