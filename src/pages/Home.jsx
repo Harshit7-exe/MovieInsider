@@ -9,9 +9,9 @@ import { fetchGenres } from "../api/tmdb";
 export default function Home() {
   const [allMovies, setAllMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
-  const [genres, setGenres] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState("");
+  const [genres, setGenres] = useState([]);  const [selectedGenre, setSelectedGenre] = useState("");
   const [minRating, setMinRating] = useState(0);
+  const [showAdult, setShowAdult] = useState(false);
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -31,15 +31,14 @@ export default function Home() {
     };
     
     fetchInitialData();
-  }, []);
-  useEffect(() => {
+  }, []);  useEffect(() => {
     applyFilters(allMovies, selectedGenre, minRating);
-  }, [allMovies, selectedGenre, minRating]);
-
+  }, [allMovies, selectedGenre, minRating, showAdult]);
   const applyFilters = (movies, genre, rating) => {
     const filtered = movies.filter((movie) =>
       (!genre || movie.genre_ids.includes(Number(genre))) &&
-      movie.vote_average >= rating
+      movie.vote_average >= rating &&
+      (showAdult || !movie.adult) // Show adult movies only if showAdult is true
     );
     setDisplayedMovies(filtered);
   };
@@ -134,14 +133,14 @@ export default function Home() {
             Discover amazing movies and explore your favorite genres
           </Typography>
         </Container>
-      </Box>
-
-      <FilterBar
+      </Box>      <FilterBar
         genres={genres}
         selectedGenre={selectedGenre}
         minRating={minRating}
+        showAdult={showAdult}
         onGenreChange={(e) => setSelectedGenre(e.target.value)}
         onRatingChange={(_, val) => setMinRating(val)}
+        onAdultChange={(e) => setShowAdult(e.target.checked)}
       />
       
       <MovieGrid movies={displayedMovies} />

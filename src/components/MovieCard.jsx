@@ -1,5 +1,6 @@
-import { Card, CardMedia, CardContent, Typography, Box, Rating } from '@mui/material';
+import { Card, CardMedia, Box, Rating, Typography, Chip } from '@mui/material';
 import { useState } from 'react';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 export default function MovieCard({ movie }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -31,6 +32,28 @@ export default function MovieCard({ movie }) {
           transition: 'filter 0.3s ease',
         }}
       />
+      {movie.adult && (
+        <Chip
+          icon={<WarningAmberIcon />}
+          label="18+"
+          color="error"
+          size="small"
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            bgcolor: 'rgba(229, 9, 20, 0.9)',
+            backdropFilter: 'blur(4px)',
+            fontWeight: 'bold',
+            animation: 'pulse 2s infinite',
+            '@keyframes pulse': {
+              '0%': { boxShadow: '0 0 0 0 rgba(229, 9, 20, 0.4)' },
+              '70%': { boxShadow: '0 0 0 10px rgba(229, 9, 20, 0)' },
+              '100%': { boxShadow: '0 0 0 0 rgba(229, 9, 20, 0)' },
+            },
+          }}
+        />
+      )}
       <Box
         className="movie-info"
         sx={{
@@ -57,25 +80,37 @@ export default function MovieCard({ movie }) {
         >
           {movie.title}
         </Typography>
-        <Rating 
-          value={movie.vote_average / 2} 
-          precision={0.5} 
-          readOnly
-          sx={{
-            '& .MuiRating-icon': {
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+          <Rating 
+            value={movie.vote_average / 2} 
+            precision={0.5} 
+            readOnly
+            size="small"
+            sx={{
+              '& .MuiRating-icon': {
+                color: '#E50914',
+              }
+            }}
+          />
+          <Typography 
+            variant="caption" 
+            sx={{ 
               color: '#E50914',
-            }
-          }}
-        />
+              fontWeight: 'bold'
+            }}
+          >
+            {movie.vote_average.toFixed(1)}
+          </Typography>
+        </Box>
         <Typography 
           variant="body2" 
           sx={{ 
             color: '#ccc',
-            mt: 1,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
           }}
         >
           {movie.overview}
