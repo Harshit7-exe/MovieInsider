@@ -9,52 +9,79 @@ import { fetchGenres } from "../api/tmdb";
 export default function Home() {
   const [allMovies, setAllMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
-  const [genres, setGenres] = useState([]);  const [selectedGenre, setSelectedGenre] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState("");
   const [minRating, setMinRating] = useState(0);
   const [showAdult, setShowAdult] = useState(false);
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
+        console.log('Fetching initial data with showAdult:', showAdult);
         const [genresData, moviesData] = await Promise.all([
           fetchGenres(),
-          fetchPopularMovies()
+          fetchPopularMovies(showAdult)
         ]);
+        console.log('Fetched movies count:', moviesData.length);
+        console.log('Sample movies:', moviesData.slice(0, 3).map(m => ({ 
+          title: m.title, 
+          adult: m.adult 
+        })));
+        
         setGenres(genresData);
         setAllMovies(moviesData);
         applyFilters(moviesData, selectedGenre, minRating);
       } catch (error) {
         console.error('Error fetching initial data:', error);
-        // Set empty arrays as fallback to prevent white screen
         setGenres([]);
         setAllMovies([]);
+        setDisplayedMovies([]);
       }
     };
     
     fetchInitialData();
-  }, []);  useEffect(() => {
+  }, [showAdult, selectedGenre, minRating]);
+
+  useEffect(() => {
     applyFilters(allMovies, selectedGenre, minRating);
-  }, [allMovies, selectedGenre, minRating, showAdult]);
-  const applyFilters = (movies, genre, rating) => {
-    const filtered = movies.filter((movie) =>
-      (!genre || movie.genre_ids.includes(Number(genre))) &&
-      movie.vote_average >= rating &&
-      (showAdult || !movie.adult) // Show adult movies only if showAdult is true
-    );
+  }, [allMovies, selectedGenre, minRating, showAdult]);  const applyFilters = (movies, genre, rating) => {
+    console.log('Applying filters:', {
+      totalMovies: movies.length,
+      genre,
+      rating,
+      showAdult
+    });
+
+    const filtered = movies.filter((movie) => {
+      const genreMatch = !genre || movie.genre_ids.includes(Number(genre));
+      const ratingMatch = movie.vote_average >= rating;
+      // We don't need to filter adult content here as it's handled in the API
+      return genreMatch && ratingMatch;
+    });
+
+    console.log('Filtered movies count:', filtered.length);
+    console.log('Sample filtered:', filtered.slice(0, 3).map(m => ({
+      title: m.title,
+      adult: m.adult,
+      rating: m.vote_average
+    })));
+
     setDisplayedMovies(filtered);
   };
-
   const handleSearch = async (query) => {
+    console.log('Searching with query:', query, 'showAdult:', showAdult);
     let results = [];
 
     if (!query.trim()) {
-      results = await fetchPopularMovies();
+      results = await fetchPopularMovies(showAdult);
     } else {
-      results = await searchMovies(query);
+      results = await searchMovies(query, showAdult);
     }
 
+    console.log('Search results count:', results.length);
     setAllMovies(results);
     applyFilters(results, selectedGenre, minRating);
   };
+
   return (
     <Box 
       sx={{ 
@@ -133,7 +160,8 @@ export default function Home() {
             Discover amazing movies and explore your favorite genres
           </Typography>
         </Container>
-      </Box>      <FilterBar
+      </Box>      
+      <FilterBar
         genres={genres}
         selectedGenre={selectedGenre}
         minRating={minRating}

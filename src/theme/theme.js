@@ -5,13 +5,22 @@ export const theme = createTheme({
     mode: 'dark',
     primary: {
       main: '#E50914',
+      light: '#ff4d4d',
+      dark: '#b71c1c',
     },
     secondary: {
       main: '#FFFFFF',
+      dark: '#f0f0f0',
     },
     background: {
-      default: '#141414',
-      paper: '#232323',
+      default: '#0a0a0a',
+      paper: '#1a1a1a',
+      gradient: 'linear-gradient(180deg, rgba(10,10,10,0.8) 0%, rgba(10,10,10,1) 100%)',
+    },
+    custom: {
+      spotlight: 'rgba(229, 9, 20, 0.1)',
+      overlay: 'rgba(0, 0, 0, 0.7)',
+      glass: 'rgba(255, 255, 255, 0.1)',
     },
   },
   components: {
