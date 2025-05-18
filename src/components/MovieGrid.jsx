@@ -4,7 +4,6 @@ import MovieCard from "./MovieCard";
 
 export default function MovieGrid({ movies }) {
   const navigate = useNavigate();
-
   if (!movies.length) {
     return (
       <Box 
@@ -12,7 +11,11 @@ export default function MovieGrid({ movies }) {
           height: '70vh', 
           display: 'flex', 
           alignItems: 'center', 
-          justifyContent: 'center' 
+          justifyContent: 'center',
+          background: 'linear-gradient(45deg, rgba(229,9,20,0.05) 0%, rgba(0,0,0,0) 100%)',
+          borderRadius: '24px',
+          backdropFilter: 'blur(10px)',
+          margin: '24px'
         }}
       >
         <Typography 
@@ -20,9 +23,10 @@ export default function MovieGrid({ movies }) {
           sx={{ 
             color: 'text.secondary',
             textAlign: 'center',
-            animation: 'fadeIn 1s ease-in',
+            animation: 'fadeIn 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)',
             '@keyframes fadeIn': {
-              '0%': { opacity: 0, transform: 'translateY(20px)' },
+              '0%': { opacity: 0, transform: 'translateY(30px)' },
               '100%': { opacity: 1, transform: 'translateY(0)' }
             }
           }}
@@ -31,30 +35,45 @@ export default function MovieGrid({ movies }) {
         </Typography>
       </Box>
     );
-  }
-
-  return (
-    <Container maxWidth="xl" sx={{ mt: 10, mb: 4 }}>
+  }  return (
+    <Container 
+      maxWidth="xl" 
+      sx={{ 
+        mt: 6, 
+        mb: 4,
+        px: { xs: 2, sm: 3, md: 4 },
+      }}
+    >
       <Grid 
         container 
-        spacing={3}
+        spacing={4}
+        justifyContent="center"
         sx={{
           '& .MuiGrid-item': {
-            animation: 'fadeIn 0.6s ease-in',
+            display: 'flex',
+            justifyContent: 'center',
+            animation: 'fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
             '@keyframes fadeIn': {
-              '0%': { opacity: 0, transform: 'translateY(20px)' },
-              '100%': { opacity: 1, transform: 'translateY(0)' }
+              '0%': { 
+                opacity: 0, 
+                transform: 'translateY(20px)',
+              },
+              '100%': { 
+                opacity: 1, 
+                transform: 'translateY(0)',
+              }
             }
           }
         }}
       >
-        {movies.map((movie, index) => (
-          <Grid 
+        {movies.map((movie, index) => (          <Grid 
             item 
             key={movie.id}
-            xs={12} sm={6} md={4} lg={3}
+            xs={12} sm={6} md={4} lg={3} xl={2.4}
             sx={{ 
               animationDelay: `${index * 0.1}s`,
+              minWidth: { xs: '280px', sm: '300px' },
+              maxWidth: '350px'
             }}
           >
             <Box 

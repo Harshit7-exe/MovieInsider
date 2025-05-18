@@ -92,10 +92,9 @@ export default function Home() {
     >
       <Header onSearch={handleSearch} />
       
-      {/* Hero Section */}
-      <Box
+      {/* Hero Section */}      <Box
         sx={{
-          height: '70vh',
+          height: '85vh',
           width: '100%',
           position: 'relative',
           overflow: 'hidden',
@@ -109,8 +108,28 @@ export default function Home() {
             backgroundImage: `url(https://image.tmdb.org/t/p/original${displayedMovies[0]?.backdrop_path || ''})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            filter: 'brightness(0.4)',
-            transition: 'all 0.3s ease',
+            filter: 'brightness(0.5) saturate(1.2)',
+            transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: 'scale(1.05)',
+            animation: 'kenBurns 20s infinite alternate',
+            '@keyframes kenBurns': {
+              '0%': {
+                transform: 'scale(1.05)',
+              },
+              '100%': {
+                transform: 'scale(1.15)',
+              },
+            },
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(0deg, rgba(10,10,10,1) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.4) 100%)',
+            pointerEvents: 'none',
           },
         }}
       >
@@ -124,41 +143,93 @@ export default function Home() {
             position: 'relative',
             zIndex: 1,
           }}
-        >
-          <Typography
-            variant="h2"
+        >          <Box
             sx={{
-              color: 'white',
-              fontWeight: 'bold',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-              mb: 2,
-              animation: 'fadeInUp 1s ease',
-              '@keyframes fadeInUp': {
-                '0%': {
-                  opacity: 0,
-                  transform: 'translateY(20px)',
-                },
-                '100%': {
-                  opacity: 1,
-                  transform: 'translateY(0)',
-                },
-              },
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 3,
+              maxWidth: '800px'
             }}
           >
-            Welcome to MovieInsider
-          </Typography>
-          <Typography
-            variant="h5"
-            sx={{
-              color: 'rgba(255,255,255,0.8)',
-              maxWidth: '600px',
-              mb: 4,
-              animation: 'fadeInUp 1s ease 0.3s',
-              animationFillMode: 'both',
-            }}
-          >
-            Discover amazing movies and explore your favorite genres
-          </Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                color: 'white',
+                fontWeight: 900,
+                textShadow: '0 2px 20px rgba(0,0,0,0.5)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+                animation: 'fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                background: 'linear-gradient(45deg, #FFFFFF 30%, rgba(255,255,255,0.8) 90%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                '@keyframes fadeInUp': {
+                  '0%': {
+                    opacity: 0,
+                    transform: 'translateY(40px)',
+                    filter: 'blur(10px)',
+                  },
+                  '100%': {
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                    filter: 'blur(0)',
+                  },
+                },
+              }}
+            >
+              Welcome to MovieInsider
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                color: 'rgba(255,255,255,0.9)',
+                maxWidth: '600px',
+                fontWeight: 500,
+                lineHeight: 1.4,
+                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                animation: 'fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s',
+                animationFillMode: 'both',
+                position: 'relative',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  left: '-20px',
+                  top: '50%',
+                  width: '4px',
+                  height: '40%',
+                  transform: 'translateY(-50%)',
+                  background: 'linear-gradient(180deg, #E50914, transparent)',
+                  borderRadius: '4px',
+                },
+              }}
+            >
+              Discover amazing movies and explore your favorite genres
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 2,
+                animation: 'fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s',
+                animationFillMode: 'both',
+              }}
+            >
+              {displayedMovies[0] && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: 'rgba(255,255,255,0.7)',
+                    maxWidth: '500px',
+                    fontSize: '1.1rem',
+                    lineHeight: 1.6,
+                    textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                  }}
+                >
+                  {displayedMovies[0].overview}
+                </Typography>
+              )}
+            </Box>
+          </Box>
         </Container>
       </Box>      
       <FilterBar
